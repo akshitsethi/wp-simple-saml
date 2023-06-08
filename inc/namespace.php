@@ -237,7 +237,22 @@ function action_login() {
 		exit;
 	}
 
-	instance()->login( $redirect_url );
+	/**
+	 * Custom code added to be able to set additional parameters to the login function.
+	 * @see https://tenup.teamwork.com/app/tasks/19257020 (SSO Task)
+	 * @author Akshit Sethi (akshit.sethi@10up.com)
+	 * @since 8th June 2023
+	 */
+	$additional_params = [
+		[],    // Extra parameters to be added to the GET
+		false, // When true the AuthNRequest will set the ForceAuthn='true'
+		false, // When true the AuthNRequest will set the Ispassive='true'
+		false, // True if we want to stay (returns the url string) False to redirect
+		true,  // When true the AuthNRequest will set a nameIdPolicy element
+	];
+	$additional_params = apply_filters( 'snow_sso_additional_params', $additional_params );
+
+	instance()->login( $redirect_url, ...$additional_params );
 }
 
 /**
