@@ -1,9 +1,9 @@
 {
-	"name": "humanmade/wp-simple-saml",
+	"name": "akshitsethi/wp-simple-saml",
 	"type": "wordpress-plugin",
 	"description": "WordPress Simple SAML plugin",
 	"keywords": [ "saml","wordpress","sso","onelogin","single-sign-on" ],
-	"homepage": "https://github.com/humanmade/wp-simple-saml",
+	"homepage": "https://github.com/akshitsethi/wp-simple-saml",
 	"license": "GPL-3.0-or-later",
 	"authors": [
 		{
