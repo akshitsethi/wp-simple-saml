@@ -168,7 +168,7 @@ function authenticate_with_sso() {
 
 	$redirect = get_redirection_url();
 
-	instance()->login( $redirect );
+	instance()->login( $redirect, [], true );
 }
 
 /**
@@ -252,7 +252,7 @@ function action_login() {
 	];
 	$additional_params = apply_filters( 'snow_sso_additional_params', $additional_params );
 
-	instance()->login( $redirect_url, ...$additional_params );
+	instance()->login( $redirect_url, [], true );
 }
 
 /**
