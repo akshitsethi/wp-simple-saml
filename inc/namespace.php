@@ -351,6 +351,9 @@ function process_response() {
 		return new \WP_Error( 'no-saml-instance', esc_html__( 'Unable to get instance of SAML2 Auth object.', 'wp-simple-saml' ) );
 	}
 
+	print_r($_POST);
+	exit;
+
 	try {
 		$config = Admin\get_config();
 		if ( is_wp_error( $config ) ) {
