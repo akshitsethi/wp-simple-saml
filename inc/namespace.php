@@ -351,9 +351,6 @@ function process_response() {
 		return new \WP_Error( 'no-saml-instance', esc_html__( 'Unable to get instance of SAML2 Auth object.', 'wp-simple-saml' ) );
 	}
 
-	print_r($_POST);
-	exit;
-
 	try {
 		$config = Admin\get_config();
 		if ( is_wp_error( $config ) ) {
@@ -371,16 +368,23 @@ function process_response() {
 		// This is low-risk, as if the Destination validates against the `sso_sp_base`,
 		// it should be safe to also assume it as safe to be used on the current URL too.
 		$response = new SAML2Response( $saml->getSettings(), $_POST['SAMLResponse'] );
+		print_r($response);
 		if ( $response->getXMLDocument()->documentElement->hasAttribute( 'Destination' ) ) {
 			$host = parse_url( $config['sp']['assertionConsumerService']['url'], PHP_URL_HOST );
 			$original_host = $_SERVER['HTTP_HOST'];
 			$_SERVER['HTTP_HOST'] = $host;
 
 		}
+
 		$saml->processResponse();
 	} catch ( \Exception $e ) {
+		print_r('ERROR: 1');
+		print_r($saml->getLastErrorException());
+		print_r($saml->getLastErrorReason());
+		exit;
+
 		/* translators: %s = error message */
-		return new \WP_Error( 'invalid-saml', sprintf( esc_html__( 'Error: Could not parse the authentication response, please forward this error to your administrator: "%s"', 'wp-simple-saml' ), esc_html( $e->getMessage() ) ) );
+		return new \WP_Error( 'invalid-saml', sprintf( esc_html__( 'Error 1: Could not parse the authentication response, please forward this error to your administrator: "%s"', 'wp-simple-saml' ), esc_html( $e->getMessage() ) ) );
 	} finally {
 		if ( isset( $original_host ) ) {
 			$_SERVER['HTTP_HOST'] = $original_host;
@@ -390,8 +394,13 @@ function process_response() {
 	if ( ! empty( $saml->getErrors() ) ) {
 		$errors = implode( ', ', $saml->getErrors() );
 
+		print_r('ERROR: 2');
+		print_r($saml->getLastErrorException());
+		print_r($saml->getLastErrorReason());
+		exit;
+
 		/* translators: %s = error message */
-		return new \WP_Error( 'invalid-saml', sprintf( esc_html__( 'Error: Could not parse the authentication response, please forward this error to your administrator: "%s"', 'wp-simple-saml' ), esc_html( $errors ) ) );
+		return new \WP_Error( 'invalid-saml', sprintf( esc_html__( 'Error 2: Could not parse the authentication response, please forward this error to your administrator: "%s"', 'wp-simple-saml' ), esc_html( $errors ) ) );
 	}
 
 	if ( ! $saml->isAuthenticated() ) {
